@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_manager/ui/screens/sign_in_screen.dart';
 import 'package:task_manager/ui/utils/asset_paths.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  static const String name = '/';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -20,31 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(Duration(seconds: 3));
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) =>SignInScreen()));
-    
+    Navigator.pushReplacementNamed(context, SignInScreen.name);
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-
-          SvgPicture.asset(AssetPaths.backgroundSvg,
-            fit: BoxFit.cover,
-            height: double.maxFinite,
-            width: double.maxFinite,),
-          Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(AssetPaths.logoSvg)
-            ,
-          ),
-        ],
-
+      body: ScreenBackground(
+        child: Center(child: SvgPicture.asset(AssetPaths.logoSvg)),
       ),
     );
   }
