@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/ui/screens/add_new_task_screen.dart';
 import 'package:task_manager/ui/screens/change_password_screen.dart';
 import 'package:task_manager/ui/screens/forgot_password_email_screen.dart';
 import 'package:task_manager/ui/screens/main_nav_bar_holder_screen.dart';
 import 'package:task_manager/ui/screens/pin_verification_screen.dart';
 import 'package:task_manager/ui/screens/sign_in_screen.dart';
 import 'package:task_manager/ui/screens/splash_screen.dart';
+import 'package:task_manager/ui/screens/update_profile_screen.dart';
 
 import 'ui/screens/sign_up_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
 
+  static GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigator,
       theme: ThemeData(
         colorSchemeSeed: Colors.green,
         textTheme: TextTheme(
@@ -53,7 +58,9 @@ class TaskManagerApp extends StatelessWidget {
             (context) => ForgotPasswordEmailScreen(),
         PinVerificationScreen.name: (context) => PinVerificationScreen(),
         ChangePasswordScreen.name: (context) => ChangePasswordScreen(),
-        MainNavBarHolderScreen.name: (context) => MainNavBarHolderScreen()
+        MainNavBarHolderScreen.name: (context) => MainNavBarHolderScreen(),
+        AddNewTaskScreen.name: (context) => AddNewTaskScreen(),
+        UpdateProfileScreen.name: (context) => UpdateProfileScreen()
       },
     );
   }

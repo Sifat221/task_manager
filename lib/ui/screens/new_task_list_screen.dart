@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/ui/screens/add_new_task_screen.dart';
 import 'package:task_manager/ui/widgets/task_card.dart';
 import 'package:task_manager/ui/widgets/task_count_summary_card.dart';
 
@@ -33,7 +34,9 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
               child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return TaskCard();
+                  return TaskCard(
+                    taskType: TaskType.tNew,
+                  );
                 },
               ),
             ),
@@ -47,5 +50,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     );
   }
 
-  void _onTapAddNewTaskButton() {}
+  void _onTapAddNewTaskButton() {
+    Navigator.pushNamed(context, AddNewTaskScreen.name);
+  }
 }
