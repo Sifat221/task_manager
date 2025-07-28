@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/ui/screens/sign_in_screen.dart';
 import 'package:task_manager/ui/widgets/screen_background.dart';
@@ -9,13 +8,12 @@ class ChangePasswordScreen extends StatefulWidget {
   static const String name = '/change-password';
 
   @override
-  State<ChangePasswordScreen> createState() =>
-      _ChangePasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final TextEditingController _passwordTEController = TextEditingController();
-  final TextEditingController _confirmPasswordTEController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,7 +25,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -38,70 +35,41 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Password should be more than 6 letters.',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(
-                        color: Colors.grey
-                    ),
+                    'Enter your new password',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.grey),
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
-                    controller: _passwordTEController,
-                    decoration: InputDecoration(
-                        hintText: 'Password'
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'New Password',
                     ),
-                    validator: (String? value) {
-                      if ((value?.length ?? 0) <= 6) {
-                        return 'Enter a valid password';
+                    validator: (value) {
+                      if (value == null || value.length < 6) {
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    controller: _confirmPasswordTEController,
-                    decoration: InputDecoration(
-                        hintText: 'Confirm Password'
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
                     ),
-                    validator: (String? value) {
-                      if ((value ?? '') != _passwordTEController.text) {
-                        return "Confirm password doesn't match";
+                    validator: (value) {
+                      if (value != _passwordController.text) {
+                        return 'Passwords do not match';
                       }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _onTapSubmitButton,
-                    child: Text('Confirm'),
-                  ),
-                  const SizedBox(height: 32),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Have an account? ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          letterSpacing: 0.4,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Sign In',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = _onTapSignInButton,
-                          ),
-                        ],
-                      ),
-                    ),
+                    onPressed: _submitPasswordChange,
+                    child: const Text('Confirm'),
                   ),
                 ],
               ),
@@ -112,21 +80,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  void _onTapSubmitButton() {
-    // if (_formKey.currentState!.validate()) {
-    //   // TODO: Sign in with API
-    // }
-  }
+  void _submitPasswordChange() {
+    if (_formKey.currentState!.validate()) {
+      // TODO: Call password reset API
 
-  void _onTapSignInButton() {
-    Navigator.pushNamedAndRemoveUntil(
-        context, SignInScreen.name, (predicate) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password changed successfully")),
+      );
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        SignInScreen.name,
+            (route) => false,
+      );
+    }
   }
 
   @override
   void dispose() {
-    _passwordTEController.dispose();
-    _confirmPasswordTEController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 }

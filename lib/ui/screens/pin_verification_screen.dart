@@ -11,8 +11,7 @@ class PinVerificationScreen extends StatefulWidget {
   static const String name = '/pin-verification';
 
   @override
-  State<PinVerificationScreen> createState() =>
-      _PinVerificationScreenState();
+  State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
@@ -39,13 +38,9 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'A 6 digits OTP has been sent to your email address',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(
-                        color: Colors.grey
+                    'A 6-digit OTP has been sent to your email address',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.grey,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -54,15 +49,15 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     animationType: AnimationType.fade,
                     keyboardType: TextInputType.number,
                     pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: 50,
-                        fieldWidth: 50,
-                        activeFillColor: Colors.white,
-                        selectedColor: Colors.green,
-                        inactiveColor: Colors.grey
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(5),
+                      fieldHeight: 50,
+                      fieldWidth: 50,
+                      activeFillColor: Colors.white,
+                      selectedColor: Colors.green,
+                      inactiveColor: Colors.grey,
                     ),
-                    animationDuration: Duration(milliseconds: 300),
+                    animationDuration: const Duration(milliseconds: 300),
                     backgroundColor: Colors.transparent,
                     controller: _otpTEController,
                     appContext: context,
@@ -70,14 +65,14 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _onTapSubmitButton,
-                    child: Text('Verify'),
+                    child: const Text('Verify'),
                   ),
                   const SizedBox(height: 32),
                   Center(
                     child: RichText(
                       text: TextSpan(
                         text: "Have an account? ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                           letterSpacing: 0.4,
@@ -85,12 +80,11 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                         children: [
                           TextSpan(
                             text: 'Sign In',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.green,
                               fontWeight: FontWeight.w700,
                             ),
-                            recognizer:
-                            TapGestureRecognizer()
+                            recognizer: TapGestureRecognizer()
                               ..onTap = _onTapSignInButton,
                           ),
                         ],
@@ -107,15 +101,25 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   }
 
   void _onTapSubmitButton() {
-    // if (_formKey.currentState!.validate()) {
-    //   // TODO: Sign in with API
-    // }
+    String otp = _otpTEController.text.trim();
+
+    if (otp.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter a valid 6-digit OTP")),
+      );
+      return;
+    }
+
+    // TODO: Call OTP verify API here
     Navigator.pushNamed(context, ChangePasswordScreen.name);
   }
 
   void _onTapSignInButton() {
     Navigator.pushNamedAndRemoveUntil(
-        context, SignInScreen.name, (predicate) => false);
+      context,
+      SignInScreen.name,
+          (route) => false,
+    );
   }
 
   @override
